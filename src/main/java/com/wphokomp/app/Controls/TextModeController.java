@@ -7,13 +7,16 @@ import com.wphokomp.app.View.SwingTextMode;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class TextModeController implements IModes {
     Hero hero;
     ArrayList<Hero> heroes = new ArrayList<>();
-    File inFile = new File("data.txt");
-    private boolean heroCreated = false;
+    File inFile = new File("heroes.txt");
     SwingTextMode swingTextMode;
+    GamePlay gamePlay;
+    private boolean heroCreated = false;
+    private static Scanner scanner = new Scanner( System.in );
 
     public TextModeController(SwingTextMode swingTextMode, Hero hero) {
         this.hero = hero;
@@ -26,15 +29,21 @@ public class TextModeController implements IModes {
             this.heroCreated = true;
         }
         else if (swingTextMode.getChoice().equals("2")){
+            int i = 0;
             getHeroes();
             for (Hero _hero: this.heroes) {
-                System.out.println(_hero.getHeroName());
+                System.out.println(Integer.toString(++i).concat(") ".concat(_hero.getHeroName())));
             }
+            this.hero = this.heroes.get(Integer.parseInt(scanner.nextLine()) - 1);
+            this.hero.setX(((hero.getLevel() - 1) * 5 + 10 - (hero.getLevel() % 2)) / 2);
+            this.hero.setY(((hero.getLevel() - 1) * 5 + 10 - (hero.getLevel() % 2)) / 2);
         }
         else
             throw new InvalidInput("Invalid Selection. Select 1 or 2");
         //Do game stuff
-
+        swingTextMode.displayDetails(this.hero);
+        gamePlay = new GamePlay(this.hero);
+        gamePlay.DrawMap();
 //        log(this.hero);
     }
 
@@ -43,10 +52,11 @@ public class TextModeController implements IModes {
         hero.setHeroName(swingTextMode.getHeroName());
         //Check if hero exists
         hero.setHeroClass(swingTextMode.getHeroClass());
-        hero.setLevel(0);
         hero.setExperience(0);
-        hero.setAttack(swingTextMode.getHeroAttack());
-        hero.setDefense(swingTextMode.getHeroDefense());
+        hero.setWeapon(swingTextMode.getHeroWeapon());
+        hero.setArmor(swingTextMode.getArmor());
+        hero.setAttack(swingTextMode.getAttack(hero.getWeapon()));
+        hero.setDefense(swingTextMode.getDefense(hero.getArmor()));
         hero.setHitPoints(100);
     }
 
@@ -63,7 +73,8 @@ public class TextModeController implements IModes {
                 hero.setHeroClass(stats[1]);
                 hero.setLevel(Integer.parseInt(stats[2]));
                 hero.setExperience(Integer.parseInt(stats[3]));
-                hero.setDefense(stats[4]);
+                hero.setWeapon(stats[4]);
+                hero.setArmor(stats[5]);
                 this.heroes.add(hero);
             }
         } catch (IOException ex) {
@@ -101,7 +112,7 @@ public class TextModeController implements IModes {
             String line = hero.getHeroName().concat(hero.getHeroClass()
                     .concat((Integer.toString(hero.getLevel())).concat(",")
                             .concat((Integer.toString(hero.getExperience())).concat(",")
-                                    .concat(hero.getAttack().concat(hero.getDefense())))));
+                                    .concat(hero.getWeapon().concat(hero.getArmor())))));
             writer.write(line);
             writer.flush();
         } catch (IOException ex) {
