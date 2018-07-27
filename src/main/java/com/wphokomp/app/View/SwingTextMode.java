@@ -2,9 +2,6 @@ package com.wphokomp.app.View;
 
 import com.wphokomp.app.Models.Hero;
 import lombok.Getter;
-import org.omg.CORBA.INTERNAL;
-
-import java.util.HashMap;
 import java.util.Scanner;
 
 @Getter
@@ -88,5 +85,13 @@ public class SwingTextMode {
         System.out.println("Defence: ".concat(Integer.toString(hero.getDefense())));
         System.out.println("Weapon: ".concat(hero.getWeapon()));
         System.out.println("Armor: ".concat(hero.getArmor()));
+    }
+
+    public int movePlayer() {
+        System.out.println("1) North");
+        System.out.println("2) East");
+        System.out.println("3) West");
+        System.out.println("4) South");
+        return (Integer.parseInt(scanner.nextLine()));
     }
 }

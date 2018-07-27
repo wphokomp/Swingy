@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class TextModeController implements IModes {
+public class  TextModeController implements IModes {
     Hero hero;
     ArrayList<Hero> heroes = new ArrayList<>();
     File inFile = new File("heroes.txt");
@@ -42,8 +42,24 @@ public class TextModeController implements IModes {
             throw new InvalidInput("Invalid Selection. Select 1 or 2");
         //Do game stuff
         swingTextMode.displayDetails(this.hero);
-        gamePlay = new GamePlay(this.hero);
-        gamePlay.DrawMap();
+        //CreateGamePlay
+        gamePlay = new GamePlay();
+        gamePlay.DrawMap(this.hero);
+        while (this.hero.getX() >= 0 && this.hero.getX() <= gamePlay.getDimentions()
+                && this.hero.getY() >= 0 && this.hero.getY() <= gamePlay.getDimentions())
+        {
+            gamePlay.DrawMap(this.hero);
+            if (swingTextMode.movePlayer() == 1)
+                this.hero.setY(this.hero.getY() - 1);
+            else if (swingTextMode.movePlayer() == 4)
+                this.hero.setY(this.hero.getY() + 1);
+            else if (swingTextMode.movePlayer() == 2)
+                this.hero.setX(this.hero.getX() + 1);
+            else if (swingTextMode.movePlayer() == 3)
+                this.hero.setX(this.hero.getX() - 1);
+            else
+                throw new InvalidInput("You can either move, North, East, West and South.");
+        }
 //        log(this.hero);
     }
 
