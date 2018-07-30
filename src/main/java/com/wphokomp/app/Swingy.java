@@ -1,5 +1,6 @@
 package com.wphokomp.app;
 
+import com.wphokomp.app.Controls.GamePlay;
 import com.wphokomp.app.Controls.TextModeController;
 import com.wphokomp.app.Exceptions.InvalidInput;
 import com.wphokomp.app.Models.Hero;
@@ -9,15 +10,17 @@ public class Swingy {
     public static void main(String[] args) {
         Hero hero;
         SwingTextMode swingTextMode;
+        GamePlay gamePlay;
 
         if ("console".equals(args[0])) {
             swingTextMode = new SwingTextMode();
             hero = new Hero();
-            TextModeController textModeController = new TextModeController(swingTextMode, hero);
+            gamePlay = new GamePlay(swingTextMode, hero);
+            TextModeController textModeController = new TextModeController(swingTextMode, gamePlay);
             try {
                 textModeController.playGame();
             } catch (InvalidInput ii) {
-                System.out.println("Invalid selection. Select 1 or 2.");
+                System.out.println(ii.getMessage());
             }
         }
         else if ("gui".equals(args[0]))

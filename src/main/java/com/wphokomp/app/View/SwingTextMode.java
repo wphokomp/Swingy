@@ -1,7 +1,12 @@
 package com.wphokomp.app.View;
 
+import com.wphokomp.app.Exceptions.InvalidInput;
+import com.wphokomp.app.Models.Enemy;
 import com.wphokomp.app.Models.Hero;
 import lombok.Getter;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 @Getter
@@ -87,11 +92,27 @@ public class SwingTextMode {
         System.out.println("Armor: ".concat(hero.getArmor()));
     }
 
-    public int movePlayer() {
+    public void drawMap(Hero hero, ArrayList<Enemy> enemies, int mapSize) {
+        for (int y = 0; y < mapSize; y++) {
+            for (int x = 0; x < mapSize; x++) {
+                if (x == hero.getX() && y == hero.getY())
+                    System.out.print(" X");
+//                else
+//                    System.out.print(" .");
+            }
+            System.out.println();
+        }
+    }
+
+    public int movePlayer() throws InvalidInput {
+        int     move;
         System.out.println("1) North");
         System.out.println("2) East");
         System.out.println("3) West");
         System.out.println("4) South");
-        return (Integer.parseInt(scanner.nextLine()));
+        move = Integer.parseInt(scanner.nextLine());
+        if (move < 1 || move > 4)
+            throw new InvalidInput("You can either move, North, East, West and South.");
+        return (move);
     }
 }
