@@ -30,11 +30,11 @@ public class  TextModeController {
             this.hero.setX(this.hero.getX() - 1);
         else if (direction == 4)
             this.hero.setY(this.hero.getY() + 1);
-        for (Enemy e:
-             gamePlay.getEnemies()) {
-            if (e.getY() == this.hero.getY() && e.getX() == this.hero.getX())
-                System.out.println("FOUND AN ENEMY");
-        }
+//        for (Enemy e:
+//             gamePlay.getEnemies()) {
+//            if (e.getY() == this.hero.getY() && e.getX() == this.hero.getX())
+//                System.out.println("FOUND AN ENEMY");
+//        }
     }
 
     public void playGame() throws InvalidInput {
@@ -42,6 +42,7 @@ public class  TextModeController {
         swingTextMode.displayDetails(this.hero);
         while (this.hero.getX() < gamePlay.getMapSize() && this.hero.getX() >= 0
                 && this.hero.getY() >= 0 && this.hero.getY() < gamePlay.getMapSize()) {
+
             swingTextMode.drawMap(this.hero, gamePlay.getEnemies(), gamePlay.getMapSize());
             updateHero();
         }
