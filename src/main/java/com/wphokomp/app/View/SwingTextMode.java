@@ -97,8 +97,6 @@ public class SwingTextMode {
             for (int x = 0; x < mapSize; x++) {
                 if (x == hero.getX() && y == hero.getY())
                     System.out.print(" X");
-//                else
-//                    System.out.print(" .");
             }
             System.out.println();
         }
