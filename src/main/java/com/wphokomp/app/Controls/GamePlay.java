@@ -39,20 +39,23 @@ public class GamePlay implements IModes {
             for (Hero _hero : this.heroes)
                 System.out.println(Integer.toString(++i).concat(") ".concat(_hero.getHeroName())));
             hero = this.heroes.get(Integer.parseInt(scanner.nextLine()) - 1);
+            hero.setHitPoints(100);
         } else
             throw new InvalidInput("Invalid Selection. Select 1 or 2");
         this.mapSize = ((hero.getLevel() - 1) * 5 + 10 - (hero.getLevel() % 2));
         hero.setX(this.mapSize / 2);
         hero.setY(this.mapSize / 2);
-        getEnemyList();
+        getEnemyList(hero);
         return (hero);
     }
 
-    public void getEnemyList() {
+    public void getEnemyList(Hero hero) {
         Random rand = new Random();
         int size = (this.mapSize / 2) - ((this.mapSize / 2) % 2);
         while (this.enemies.size() < size) {
             Enemy enemy = new Enemy();
+            enemy.setDefense(10 * hero.getLevel());
+            enemy.setAttack(10 * hero.getLevel());
             enemy.setHitPoints(100);
             enemy.setX(rand.nextInt(this.mapSize));
             enemy.setY(rand.nextInt(this.mapSize));

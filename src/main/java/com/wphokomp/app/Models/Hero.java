@@ -15,12 +15,10 @@ public class Hero extends Character {
     private String heroClass;
     private int level = 1;
     private int experience;
-    @Min(0)
-    private int attack;
-    @Min(0)
-    private int defense;
     @NotNull
     private String weapon;
     @NotNull
     private String armor;
+
+    public int prevDirection;
 }
