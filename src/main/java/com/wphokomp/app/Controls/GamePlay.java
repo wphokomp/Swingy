@@ -39,6 +39,8 @@ public class GamePlay implements IModes {
             for (Hero _hero : this.heroes)
                 System.out.println(Integer.toString(++i).concat(") ".concat(_hero.getHeroName())));
             hero = this.heroes.get(Integer.parseInt(scanner.nextLine()) - 1);
+            hero.setAttack(swingTextMode.getAttack(hero.getWeapon()));
+            hero.setDefense(swingTextMode.getDefense(hero.getArmor()));
             hero.setHitPoints(100);
         } else
             throw new InvalidInput("Invalid Selection. Select 1 or 2");
@@ -52,10 +54,12 @@ public class GamePlay implements IModes {
     public void getEnemyList(Hero hero) {
         Random rand = new Random();
         int size = (this.mapSize / 2) - ((this.mapSize / 2) % 2);
+        int[] attack = {2, 4, 5, 8, 11, 15};
+        int[] defense = {1, 2, 4, 7, 10, 20};
         while (this.enemies.size() < size) {
             Enemy enemy = new Enemy();
-            enemy.setDefense(10 * hero.getLevel());
-            enemy.setAttack(10 * hero.getLevel());
+            enemy.setDefense(defense[hero.getLevel() - 1]);
+            enemy.setAttack(attack[hero.getLevel() - 1]);
             enemy.setHitPoints(100);
             enemy.setX(rand.nextInt(this.mapSize));
             enemy.setY(rand.nextInt(this.mapSize));

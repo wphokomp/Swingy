@@ -15,10 +15,5 @@ public class Hero extends Character {
     private String heroClass;
     private int level = 1;
     private int experience;
-    @NotNull
-    private String weapon;
-    @NotNull
-    private String armor;
-
     public int prevDirection;
 }

@@ -15,6 +15,7 @@ public class SwingTextMode {
     private static Scanner scanner = new Scanner(System.in);
 
     public SwingTextMode() {
+        clearScreen();
         System.out.println("1) Create hero.");
         System.out.println("2) Select a hero.");
         this.choice = scanner.nextLine();
@@ -34,7 +35,7 @@ public class SwingTextMode {
 
     public String getHeroWeapon() {
         int i = 1;
-        String[] weapons = {"Arming sword", "Dagger", "Falchion", "Katana", "Knife", "Longsword"};
+        String[] weapons = {"Short sword", "Dagger", "Falchion", "Katana", "Long Bow", "Long sword"};
 
         System.out.println("Choose your weapon: ");
         for (String w : weapons) {
@@ -45,10 +46,10 @@ public class SwingTextMode {
 
     public int getAttack(String weapon) {
         int i = 0;
-        String[] weapons = {"Arming sword", "Dagger", "Falchion", "Katana", "Knife", "Longsword"};
+        String[] weapons = {"Short sword", "Dagger", "Falchion", "Katana", "Long Bow", "Long sword"};
         int[] attack = {4, 2, 6, 5, 3, 5};
         for (String w : weapons) {
-            if (w.equals(weapon)) {
+            if (w.toLowerCase().equals(weapon.toLowerCase())) {
                 return (attack[i]);
             }
             i++;
@@ -58,8 +59,8 @@ public class SwingTextMode {
 
     public String getArmor() {
         int i = 1;
-        String[] armor = {"Mining armor", "Wood armor", "Rich Mahogany armor", "Ebonwood armor"
-                , "Shadewood armor", "Rain armor"};
+        String[] armor = {"Mining armor", "Steel armor", "Rich Mahogany armor", "Ebonwood armor"
+                , "Shadewood armor", "Leather armor"};
 
         System.out.println("Choose your armor: ");
         for (String a : armor) {
@@ -70,12 +71,12 @@ public class SwingTextMode {
 
     public int getDefense(String _armor) {
         int i = 0;
-        String[] armor = {"Mining armor", "Wood armor", "Rich Mahogany armor", "Ebonwood armor"
-                , "Shadewood armor", "Rain armor"};
+        String[] armor = {"Mining armor", "Steel armor", "Rich Mahogany armor", "Ebonwood armor"
+                , "Shadewood armor", "Leather armor"};
         int[] defense = {3, 3, 4, 5, 5, 3};
 
         for (String a : armor) {
-            if (a.equals(_armor)) {
+            if (a.toLowerCase().equals(_armor.toLowerCase())) {
                 return (defense[i]);
             }
             i++;
@@ -114,7 +115,8 @@ public class SwingTextMode {
     public void drawMap(Hero hero, ArrayList<Enemy> enemies, int mapSize) {
         clearScreen();
         Enemy e;
-        System.out.println(" Life: ".concat(Integer.toString(hero.getHitPoints())));
+        System.out.print(" Life: ".concat(Integer.toString(hero.getHitPoints()).concat("\t")));
+        System.out.println(" Level: ".concat(Integer.toString(hero.getLevel())));
         for (int y = 0; y < mapSize; y++) {
             for (int x = 0; x < mapSize; x++) {
                 e = getEnemy(x, y, enemies);
@@ -130,12 +132,14 @@ public class SwingTextMode {
     }
 
     public int movePlayer() throws InvalidInput {
-        int move;
+        int move = 0;
         System.out.println("1) North");
         System.out.println("2) East");
         System.out.println("3) West");
         System.out.println("4) South");
-        move = Integer.parseInt(scanner.nextLine());
+        try {
+            move = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException ex) { }
         if (move < 1 || move > 4)
             throw new InvalidInput("You can either move, North, East, West and South.");
         return (move);
