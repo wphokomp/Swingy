@@ -47,7 +47,7 @@ public class SwingTextMode {
     public int getAttack(String weapon) {
         int i = 0;
         String[] weapons = {"Short sword", "Dagger", "Falchion", "Katana", "Long Bow", "Long sword"};
-        int[] attack = {4, 2, 6, 5, 3, 5};
+        int[] attack = {6, 5, 12, 15, 10, 30};
         for (String w : weapons) {
             if (w.toLowerCase().equals(weapon.toLowerCase())) {
                 return (attack[i]);
@@ -73,7 +73,7 @@ public class SwingTextMode {
         int i = 0;
         String[] armor = {"Mining armor", "Steel armor", "Rich Mahogany armor", "Ebonwood armor"
                 , "Shadewood armor", "Leather armor"};
-        int[] defense = {3, 3, 4, 5, 5, 3};
+        int[] defense = {20, 22, 5, 2, 7, 3};
 
         for (String a : armor) {
             if (a.toLowerCase().equals(_armor.toLowerCase())) {

@@ -21,19 +21,42 @@ public class HeroStats {
         int decision = fightOrFlight.fightOrFlight();
         if (decision == 1) {
             fight();
-            System.out.println(this.enemy.getHitPoints());
         } else if (decision == 2) {
             throw new InvalidInput("Threw 2");
         }
     }
 
-    private void fight() throws InvalidInput {
+    private void fight() {
         Random rand = new Random();
-        int hits = rand.nextInt(4);
-        if (hits == 0) hits = 1;
+        int hits;
         while (this.hero.getHitPoints() > 0 && this.enemy.getHitPoints() > 0) {
-            this.hero.setHitPoints((this.hero.getHitPoints() - (this.enemy.getAttack() * hits)) - this.hero.getDefense());
-            this.enemy.setHitPoints((this.enemy.getHitPoints() - (this.hero.getAttack() * hits)) - this.enemy.getDefense());
+            hits = rand.nextInt(4);
+            if (hits == 0) hits = 1;
+            this.enemy.setHitPoints((this.enemy.getHitPoints() - ((this.hero.getAttack() * hits) - this.enemy.getDefense())));
+            this.hero.setHitPoints((this.hero.getHitPoints() - ((this.enemy.getAttack() * hits) - this.hero.getDefense())));
         }
+        if (this.hero.getHitPoints() > 0) {
+            this.hero.setExperience(((int) (this.hero.getLevel() * 1000 + Math.pow(this.hero.getLevel() - 1, 2) * 450)));
+            levelUp();
+        }
+    }
+
+    public int levelUp() {
+        if (this.hero.getExperience() >= 1000) {
+            this.hero.setLevel(2);
+            return (1);
+        } else if (this.hero.getExperience() >= 2450) {
+            this.hero.setLevel(3);
+            return (1);
+        } else if (this.hero.getExperience() >= 4800) {
+            this.hero.setLevel(4);
+            return (1);
+        } else if (this.hero.getExperience() >= 8050) {
+            this.hero.setLevel(5);
+            return (1);
+        } else if (this.hero.getExperience() >= 8050) {
+            this.hero.setLevel(6);
+            return (1);
+        } else return (0);
     }
 }

@@ -35,10 +35,10 @@ public class TextModeController {
     }
 
     public void playGame() throws InvalidInput {
+        Enemy enemy = null;
         this.hero = gamePlay.initGame();
         swingTextMode.displayDetails(this.hero);
         ArrayList<Enemy> enemies = gamePlay.getEnemies();
-//        swingTextMode.displayDetails(this.hero);
         while (this.hero.getX() < gamePlay.getMapSize() && this.hero.getX() >= 0
                 && this.hero.getY() >= 0 && this.hero.getY() < gamePlay.getMapSize()) {
             swingTextMode.drawMap(this.hero, enemies, gamePlay.getMapSize());
@@ -47,17 +47,20 @@ public class TextModeController {
                     enemies) {
                 if (e.getY() == this.hero.getY() && e.getX() == this.hero.getX()) {
                     heroStats = new HeroStats(this.hero, e);
-//                    System.out.println(e.getDefense());
-//                    System.out.println(e.getAttack());
+                    enemy = e;
                     heroStats.makeDecision();
-//                    enemies.remove(e);
-                    break ;
-//                    FightOrFlight fightOrFlight = new FightOrFlight();
-//                    System.out.println(e.getHitPoints());
-//                    System.out.println(e.getAttack());
-//                    System.out.println(e.getDefense());
-//                    throw new InvalidInput("END");
+                    break;
                 }
+            }
+            if (this.hero.getHitPoints() > 0) {
+                if (enemy != null)
+                    enemies.remove(enemy);
+                if (heroStats.levelUp() == 1) {
+                    this.hero.setArmor();
+                }
+            } else {
+                swingTextMode.displayDetails(this.hero);
+                break;
             }
         }
     }

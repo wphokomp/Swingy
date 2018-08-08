@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -30,7 +31,7 @@ public class GamePlay implements IModes {
         this.swingTextMode = swingTextMode;
     }
 
-    public Hero initGame() throws InvalidInput {
+    public Hero  initGame() throws InvalidInput {
         if (swingTextMode.getChoice().equals("1")) {
             createHero();
         } else if (swingTextMode.getChoice().equals("2")) {
@@ -51,9 +52,21 @@ public class GamePlay implements IModes {
         return (hero);
     }
 
+    public ArrayList<String> artifacts() {
+        ArrayList<String> artifact = new ArrayList<>();
+        String[] armor = {"Leather armor", "Ebonwood armor", "Rich Mahogany armor"
+                , "Shadewood armor", "Mining armor", "Steel armor"};
+        String[] weapons = {"Dagger","Short sword", "Falchion", "Katana"
+                , "Long Bow", "Long sword"};
+
+        artifact.add(armor[this.hero.getLevel() - 1]);
+        artifact.add(weapons[this.hero.getLevel() - 1]);
+        return artifact;
+    }
+
     public void getEnemyList(Hero hero) {
         Random rand = new Random();
-        int size = (this.mapSize / 2) - ((this.mapSize / 2) % 2);
+        int size = ((this.mapSize / 2) - ((this.mapSize / 2) % 2)) + 4;
         int[] attack = {2, 4, 5, 8, 11, 15};
         int[] defense = {1, 2, 4, 7, 10, 20};
         while (this.enemies.size() < size) {
@@ -71,9 +84,9 @@ public class GamePlay implements IModes {
     public void createHero() {
         hero.setHeroName(swingTextMode.getHeroName());
         hero.setHeroClass(swingTextMode.getHeroClass());
-        hero.setExperience(0);
-        hero.setWeapon(swingTextMode.getHeroWeapon());
-        hero.setArmor(swingTextMode.getArmor());
+        hero.setExperience(500);
+        hero.setWeapon("Dagger");
+        hero.setArmor("Ebonwood armor");
         hero.setAttack(swingTextMode.getAttack(hero.getWeapon()));
         hero.setDefense(swingTextMode.getDefense(hero.getArmor()));
         hero.setHitPoints(100);
