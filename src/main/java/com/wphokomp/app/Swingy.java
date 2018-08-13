@@ -6,6 +6,8 @@ import com.wphokomp.app.Exceptions.InvalidInput;
 import com.wphokomp.app.Models.Hero;
 import com.wphokomp.app.View.SwingTextMode;
 
+import java.util.ArrayList;
+
 public class Swingy {
     public static void main(String[] args) {
         Hero hero;

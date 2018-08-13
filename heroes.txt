@@ -1,3 +1,3 @@
-John the Great,Knight,1,540,Short sword,Leather armor
+John the Great,Knight,1,540,Dagger,Leather armor
 Alex the Great,Elf,1,124,Dagger,Leather armor
 Thor the Mighty,Knight,2,1990,short sword,Ebonwood armor

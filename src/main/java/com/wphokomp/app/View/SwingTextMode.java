@@ -5,13 +5,13 @@ import com.wphokomp.app.Models.Enemy;
 import com.wphokomp.app.Models.Hero;
 import lombok.Getter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 @Getter
 public class SwingTextMode {
     private String choice;
-    public Enemy enemy;
     private static Scanner scanner = new Scanner(System.in);
 
     public SwingTextMode() {
@@ -33,21 +33,10 @@ public class SwingTextMode {
         return (scanner.nextLine().trim());
     }
 
-    public String getHeroWeapon() {
-        int i = 1;
-        String[] weapons = {"Short sword", "Dagger", "Falchion", "Katana", "Long Bow", "Long sword"};
-
-        System.out.println("Choose your weapon: ");
-        for (String w : weapons) {
-            System.out.println(Integer.toString(i++).concat(") ".concat(w)));
-        }
-        return (weapons[Integer.parseInt(scanner.nextLine()) - 1]);
-    }
-
     public int getAttack(String weapon) {
         int i = 0;
         String[] weapons = {"Short sword", "Dagger", "Falchion", "Katana", "Long Bow", "Long sword"};
-        int[] attack = {6, 5, 12, 15, 10, 30};
+        int[] attack = {12, 25, 32, 45, 50, 68};
         for (String w : weapons) {
             if (w.toLowerCase().equals(weapon.toLowerCase())) {
                 return (attack[i]);
@@ -57,23 +46,11 @@ public class SwingTextMode {
         return (0);
     }
 
-    public String getArmor() {
-        int i = 1;
-        String[] armor = {"Mining armor", "Steel armor", "Rich Mahogany armor", "Ebonwood armor"
-                , "Shadewood armor", "Leather armor"};
-
-        System.out.println("Choose your armor: ");
-        for (String a : armor) {
-            System.out.println(Integer.toString(i++).concat(") ".concat(a)));
-        }
-        return (armor[Integer.parseInt(scanner.nextLine()) - 1]);
-    }
-
     public int getDefense(String _armor) {
         int i = 0;
         String[] armor = {"Mining armor", "Steel armor", "Rich Mahogany armor", "Ebonwood armor"
                 , "Shadewood armor", "Leather armor"};
-        int[] defense = {20, 22, 5, 2, 7, 3};
+        int[] defense = {63, 57, 42, 35, 22, 10};
 
         for (String a : armor) {
             if (a.toLowerCase().equals(_armor.toLowerCase())) {
@@ -85,8 +62,7 @@ public class SwingTextMode {
     }
 
     public void displayDetails(Hero hero) {
-        clearScreen();
-        System.out.println("Name: ".concat(hero.getHeroName()));
+        System.out.println("Name: ".concat(hero.getName()));
         System.out.println("Class: ".concat(hero.getHeroClass()));
         System.out.println("Level: ".concat(Integer.toString(hero.getLevel())));
         System.out.println("Experience: ".concat(Integer.toString(hero.getExperience()).concat(" XP")));
@@ -96,6 +72,32 @@ public class SwingTextMode {
         System.out.println("Armor: ".concat(hero.getArmor()));
         System.out.println("Press any key to continue...");
         while (scanner.nextLine() == null) ;
+    }
+
+    public ArrayList<String> battleWon(int level) {
+        ArrayList<String> artifacts = new ArrayList<>();
+        String[] armor = {"Leather armor", "Ebonwood armor", "Rich Mahogany armor"
+                , "Shadewood armor", "Mining armor", "Steel armor"};
+        String[] weapons = {"Dagger", "Short sword", "Falchion", "Katana"
+                , "Long Bow", "Long sword"};
+
+        System.out.println("\nYOU'VE WON THE BATTLE...\nYou're rewarded with a new weapon: "
+                .concat(weapons[level]));
+        artifacts.add(weapons[level]);
+        System.out.println("And armor: "
+                .concat(armor[level]));
+        System.out.println("Press any key to continue to the next level...");
+        artifacts.add(armor[level]);
+        scanner.nextLine();
+        return (artifacts);
+    }
+
+    public void gameOver(Enemy enemy, Hero hero) {
+        clearScreen();
+        System.out.println("GAME OVER!!!");
+        System.out.println("Hero: ".concat(hero.getName().concat(". Killed by: ").concat(enemy.getName())));
+        System.out.println("XP: ".concat(Integer.toString(hero.getExperience())
+                .concat(". Level: ").concat(Integer.toString(hero.getLevel()))));
     }
 
     public void clearScreen() {
@@ -113,7 +115,6 @@ public class SwingTextMode {
     }
 
     public void drawMap(Hero hero, ArrayList<Enemy> enemies, int mapSize) {
-        clearScreen();
         Enemy e;
         System.out.print(" Life: ".concat(Integer.toString(hero.getHitPoints()).concat("\t")));
         System.out.println(" Level: ".concat(Integer.toString(hero.getLevel())));
@@ -139,7 +140,8 @@ public class SwingTextMode {
         System.out.println("4) South");
         try {
             move = Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException ex) { }
+        } catch (NumberFormatException ex) {
+        }
         if (move < 1 || move > 4)
             throw new InvalidInput("You can either move, North, East, West and South.");
         return (move);

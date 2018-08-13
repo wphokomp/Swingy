@@ -1,15 +1,11 @@
 package com.wphokomp.app.Controls;
 
 import com.wphokomp.app.Exceptions.InvalidInput;
-import com.wphokomp.app.Interface.IModes;
 import com.wphokomp.app.Models.Enemy;
 import com.wphokomp.app.Models.Hero;
-import com.wphokomp.app.View.FightOrFlight;
 import com.wphokomp.app.View.SwingTextMode;
 
-import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class TextModeController {
     Hero hero;
@@ -36,32 +32,40 @@ public class TextModeController {
 
     public void playGame() throws InvalidInput {
         Enemy enemy = null;
-        this.hero = gamePlay.initGame();
-        swingTextMode.displayDetails(this.hero);
-        ArrayList<Enemy> enemies = gamePlay.getEnemies();
-        while (this.hero.getX() < gamePlay.getMapSize() && this.hero.getX() >= 0
-                && this.hero.getY() >= 0 && this.hero.getY() < gamePlay.getMapSize()) {
-            swingTextMode.drawMap(this.hero, enemies, gamePlay.getMapSize());
-            updateHero();
-            for (Enemy e :
-                    enemies) {
-                if (e.getY() == this.hero.getY() && e.getX() == this.hero.getX()) {
-                    heroStats = new HeroStats(this.hero, e);
-                    enemy = e;
-                    heroStats.makeDecision();
+        START:
+        while (true) {
+            this.hero = gamePlay.initGame();
+            ArrayList<Enemy> enemies = gamePlay.getEnemies();
+            while (this.hero.getX() < gamePlay.getMapSize() && this.hero.getX() >= 0
+                    && this.hero.getY() >= 0 && this.hero.getY() < gamePlay.getMapSize()) {
+                swingTextMode.clearScreen();
+                swingTextMode.drawMap(this.hero, enemies, gamePlay.getMapSize());
+                updateHero();
+                for (Enemy e :
+                        enemies) {
+                    if (e.getY() == this.hero.getY() && e.getX() == this.hero.getX()) {
+                        heroStats = new HeroStats(this.hero, e);
+                        enemy = e;
+                        heroStats.makeDecision();
+                        if (this.hero.getHitPoints() > 0) {
+                            if (enemy != null)
+                                enemies.remove(enemy);
+                            if (heroStats._levelUp) {
+                                gamePlay.artifacts();
+                                continue START;
+                            }
+                        }
+                        break;
+                    }
+                }
+                if (this.hero.getHitPoints() <= 0) {
+                    swingTextMode.gameOver(enemy, this.hero);
+                    gamePlay.log(this.hero);
                     break;
                 }
             }
-            if (this.hero.getHitPoints() > 0) {
-                if (enemy != null)
-                    enemies.remove(enemy);
-                if (heroStats.levelUp() == 1) {
-                    this.hero.setArmor();
-                }
-            } else {
-                swingTextMode.displayDetails(this.hero);
+            if (this.hero.getHitPoints() <= 0)
                 break;
-            }
         }
     }
 }

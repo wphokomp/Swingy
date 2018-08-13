@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class Character {
+    @NotNull
+    private String name;
     @Min(0)
     @Max(100)
     private int hitPoints;

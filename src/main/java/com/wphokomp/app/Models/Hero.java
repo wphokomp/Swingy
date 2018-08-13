@@ -10,8 +10,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class Hero extends Character {
     @NotNull
-    private String heroName;
-    @NotNull
     private String heroClass;
     private int level = 1;
     private int experience;
