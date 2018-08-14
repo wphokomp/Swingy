@@ -3,7 +3,7 @@ package com.wphokomp.app.Controls;
 import com.wphokomp.app.Exceptions.InvalidInput;
 import com.wphokomp.app.Models.Enemy;
 import com.wphokomp.app.Models.Hero;
-import com.wphokomp.app.View.SwingTextMode;
+import com.wphokomp.app.View.SwingTextView;
 
 import java.util.ArrayList;
 
@@ -11,15 +11,15 @@ public class TextModeController {
     Hero hero;
     GamePlay gamePlay;
     HeroStats heroStats;
-    SwingTextMode swingTextMode;
+    SwingTextView swingTextView;
 
-    public TextModeController(SwingTextMode swingTextMode, GamePlay gamePlay) {
-        this.swingTextMode = swingTextMode;
+    public TextModeController(SwingTextView swingTextView, GamePlay gamePlay) {
+        this.swingTextView = swingTextView;
         this.gamePlay = gamePlay;
     }
 
     private void updateHero() throws InvalidInput {
-        this.hero.prevDirection = swingTextMode.movePlayer();
+        this.hero.prevDirection = swingTextView.movePlayer();
         if (this.hero.prevDirection == 1)
             this.hero.setY(this.hero.getY() - 1);
         else if (this.hero.prevDirection == 2)
@@ -38,8 +38,8 @@ public class TextModeController {
             ArrayList<Enemy> enemies = gamePlay.getEnemies();
             while (this.hero.getX() < gamePlay.getMapSize() && this.hero.getX() >= 0
                     && this.hero.getY() >= 0 && this.hero.getY() < gamePlay.getMapSize()) {
-                swingTextMode.clearScreen();
-                swingTextMode.drawMap(this.hero, enemies, gamePlay.getMapSize());
+                swingTextView.clearScreen();
+                swingTextView.drawMap(this.hero, enemies, gamePlay.getMapSize());
                 updateHero();
                 for (Enemy e :
                         enemies) {
@@ -59,7 +59,7 @@ public class TextModeController {
                     }
                 }
                 if (this.hero.getHitPoints() <= 0) {
-                    swingTextMode.gameOver(enemy, this.hero);
+                    swingTextView.gameOver(enemy, this.hero);
                     gamePlay.log(this.hero);
                     break;
                 }

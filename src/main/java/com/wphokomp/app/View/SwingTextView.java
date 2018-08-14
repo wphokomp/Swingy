@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 @Getter
-public class SwingTextMode {
+public class SwingTextView {
     private String choice;
     private static Scanner scanner = new Scanner(System.in);
 
-    public SwingTextMode() {
+    public SwingTextView() {
         clearScreen();
         System.out.println("1) Create hero.");
         System.out.println("2) Select a hero.");

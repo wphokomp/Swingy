@@ -4,16 +4,16 @@ import com.wphokomp.app.Exceptions.InvalidInput;
 import com.wphokomp.app.Interface.IModes;
 import com.wphokomp.app.Models.Enemy;
 import com.wphokomp.app.Models.Hero;
-import com.wphokomp.app.View.SwingTextMode;
+import com.wphokomp.app.View.SwingTextView;
 import lombok.Getter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.sql.SQLOutput;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -21,35 +21,35 @@ import java.util.Scanner;
 public class GamePlay implements IModes {
     private int mapSize;
     private Hero hero;
-    private SwingTextMode swingTextMode;
+    private SwingTextView swingTextView;
     private boolean gameInPlay = false;
     ArrayList<Enemy> enemies = new ArrayList<>();
     ArrayList<Hero> heroes = new ArrayList<>();
     File inFile = new File("heroes.txt");
     private static Scanner scanner = new Scanner(System.in);
 
-    public GamePlay(SwingTextMode swingTextMode, Hero hero) {
+    public GamePlay(SwingTextView swingTextView, Hero hero) {
         this.hero = hero;
-        this.swingTextMode = swingTextMode;
+        this.swingTextView = swingTextView;
     }
 
     public Hero initGame() throws InvalidInput {
         if (!this.gameInPlay) {
-            if (swingTextMode.getChoice().equals("1")) {
+            if (swingTextView.getChoice().equals("1")) {
                 createHero();
-            } else if (swingTextMode.getChoice().equals("2")) {
+            } else if (swingTextView.getChoice().equals("2")) {
                 int i = 0;
                 getHeroes();
                 for (Hero _hero : this.heroes)
                     System.out.println(Integer.toString(++i).concat(") ".concat(_hero.getName())));
                 hero = this.heroes.get(Integer.parseInt(scanner.nextLine()) - 1);
-                hero.setAttack(swingTextMode.getAttack(hero.getWeapon()));
-                hero.setDefense(swingTextMode.getDefense(hero.getArmor()));
+                hero.setAttack(swingTextView.getAttack(hero.getWeapon()));
+                hero.setDefense(swingTextView.getDefense(hero.getArmor()));
                 hero.setHitPoints(100);
             } else
                 throw new InvalidInput("Invalid Selection. Select 1 or 2");
             this.gameInPlay = true;
-            swingTextMode.displayDetails(hero);
+            swingTextView.displayDetails(hero);
         }
         this.mapSize = ((hero.getLevel() - 1) * 5 + 10 - (hero.getLevel() % 2));
         hero.setX(this.mapSize / 2);
@@ -59,7 +59,7 @@ public class GamePlay implements IModes {
     }
 
     public void artifacts() {
-        ArrayList<String> winnings = swingTextMode.battleWon(this.hero.getLevel() - 1);
+        ArrayList<String> winnings = swingTextView.battleWon(this.hero.getLevel() - 1);
         this.hero.setArmor(winnings.get(0));
         this.hero.setWeapon(winnings.get(1));
     }
@@ -81,15 +81,28 @@ public class GamePlay implements IModes {
         }
     }
 
+    private String stringyfy(Hero hero) {
+        String data, name, _class, level, xp, weapon, armor;
+        name = hero.getName().concat(",");
+        _class = hero.getHeroClass().concat(",");
+        level = Integer.toString(hero.getLevel()).concat(",");
+        xp = Integer.toString(hero.getExperience()).concat(",");
+        weapon = hero.getWeapon();
+        armor = hero.getArmor().concat(",");
+
+        data = name.concat(_class.concat(level.concat(xp.concat(armor.concat(weapon)))));
+        return (data);
+    }
+
     @Override
     public void createHero() {
-        hero.setName(swingTextMode.getHeroName());
-        hero.setHeroClass(swingTextMode.getHeroClass());
+        hero.setName(swingTextView.getHeroName());
+        hero.setHeroClass(swingTextView.getHeroClass());
         hero.setExperience(500);
         hero.setWeapon("Dagger");
         hero.setArmor("Ebonwood armor");
-        hero.setAttack(swingTextMode.getAttack(hero.getWeapon()));
-        hero.setDefense(swingTextMode.getDefense(hero.getArmor()));
+        hero.setAttack(swingTextView.getAttack(hero.getWeapon()));
+        hero.setDefense(swingTextView.getDefense(hero.getArmor()));
         hero.setHitPoints(100);
     }
 
@@ -110,6 +123,7 @@ public class GamePlay implements IModes {
                 hero.setArmor(stats[5]);
                 this.heroes.add(hero);
             }
+            reader.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
@@ -117,5 +131,26 @@ public class GamePlay implements IModes {
 
     @Override
     public void log(Hero hero) {
+        FileWriter fileWriter;
+        Path path = FileSystems.getDefault().getPath(inFile.getPath());
+
+        try {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(path, StandardCharsets.UTF_8));
+            int i;
+            for (i = 0; i < fileContent.size(); i++) {
+                if (fileContent.get(i).contains(hero.getName())) {
+                    fileContent.set(i, stringyfy(hero));
+                    break ;
+                }
+            }
+            if (i == fileContent.size()) {
+                fileWriter = new FileWriter(inFile, true);
+                fileWriter.write(stringyfy(hero));
+                fileWriter.flush();
+            } else
+                Files.write(path, fileContent, StandardCharsets.UTF_8);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }

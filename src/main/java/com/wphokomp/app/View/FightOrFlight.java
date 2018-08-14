@@ -1,12 +1,10 @@
 package com.wphokomp.app.View;
 
 import com.wphokomp.app.Exceptions.InvalidInput;
-import com.wphokomp.app.Models.Hero;
 
 import java.util.Scanner;
 
 public class FightOrFlight {
-    private Hero hero;
     private static Scanner scanner = new Scanner(System.in);
 
     public FightOrFlight() {
