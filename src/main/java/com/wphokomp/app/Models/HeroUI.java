@@ -12,5 +12,4 @@ public class HeroUI extends JFrame {
     private JLabel nameLabel;
     private JLabel classLabel;
     private JTextField heroClass;
-    private JButton createButton;
 }

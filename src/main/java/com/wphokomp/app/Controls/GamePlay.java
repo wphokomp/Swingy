@@ -24,7 +24,7 @@ public class GamePlay implements IModes {
     private SwingTextView swingTextView;
     private boolean gameInPlay = false;
     ArrayList<Enemy> enemies = new ArrayList<>();
-    ArrayList<Hero> heroes = new ArrayList<>();
+    ArrayList<Hero> heroes_ = new ArrayList<>();
     File inFile = new File("heroes.txt");
     private static Scanner scanner = new Scanner(System.in);
 
@@ -40,9 +40,9 @@ public class GamePlay implements IModes {
             } else if (swingTextView.getChoice().equals("2")) {
                 int i = 0;
                 getHeroes();
-                for (Hero _hero : this.heroes)
+                for (Hero _hero : this.heroes_)
                     System.out.println(Integer.toString(++i).concat(") ".concat(_hero.getName())));
-                hero = this.heroes.get(Integer.parseInt(scanner.nextLine()) - 1);
+                hero = this.heroes_.get(Integer.parseInt(scanner.nextLine()) - 1);
                 hero.setAttack(swingTextView.getAttack(hero.getWeapon()));
                 hero.setDefense(swingTextView.getDefense(hero.getArmor()));
                 hero.setHitPoints(100);
@@ -121,7 +121,7 @@ public class GamePlay implements IModes {
                 hero.setExperience(Integer.parseInt(stats[3]));
                 hero.setWeapon(stats[4]);
                 hero.setArmor(stats[5]);
-                this.heroes.add(hero);
+                this.heroes_.add(hero);
             }
             reader.close();
         } catch (IOException ex) {
@@ -140,7 +140,7 @@ public class GamePlay implements IModes {
             for (i = 0; i < fileContent.size(); i++) {
                 if (fileContent.get(i).contains(hero.getName())) {
                     fileContent.set(i, stringyfy(hero));
-                    break ;
+                    break;
                 }
             }
             if (i == fileContent.size()) {

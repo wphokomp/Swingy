@@ -5,7 +5,6 @@ import com.wphokomp.app.Models.Enemy;
 import com.wphokomp.app.Models.Hero;
 import lombok.Getter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
