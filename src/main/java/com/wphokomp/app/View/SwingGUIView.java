@@ -15,10 +15,13 @@ public class SwingGUIView extends JFrame {
     private JButton newGame = new JButton("New");
     private JButton loadGame = new JButton("Load");
     private JButton exit = new JButton("Exit");
-    private JPanel menuPanel= new JPanel();
-    private JPanel createPanel= new JPanel();
-    private JPanel loadPanel= new JPanel();
+    private JPanel menuPanel = new JPanel();
+    private JPanel createPanel = new JPanel();
+    private JPanel loadPanel = new JPanel();
+    private JPanel gamePanel = new JPanel();
     private JList<String> heroList;
+    private JList<String> detailList;
+    private DefaultListModel<String> detailModel;
     private JButton createButton = new JButton("Create");
     private JButton details = new JButton("Details");
     private Border border;
@@ -28,6 +31,7 @@ public class SwingGUIView extends JFrame {
 
     public SwingGUIView() {
         heroUI = new HeroUI();
+        heroUI.setSelect(new JButton("Select"));
         border = BorderFactory.createTitledBorder("Menu");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(300, 200);
@@ -78,14 +82,6 @@ public class SwingGUIView extends JFrame {
         createPanel.add(createButton);
     }
 
-//    public String getHeroName() {
-//        return heroUI.getHeroName().getText();
-//    }
-//
-//    public String getHeroClass() {
-//        return heroUI.getHeroClass().getText();
-//    }
-
     public boolean create() {
         createPanel.setVisible(false);
         return true;
@@ -101,27 +97,42 @@ public class SwingGUIView extends JFrame {
         loadPanel.setBackground(Color.LIGHT_GRAY);
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        for (Hero h:
-             heroes) {
+        detailModel = new DefaultListModel<>();
+        for (Hero h :
+                heroes) {
             listModel.addElement(h.getName());
         }
-        //create the list
+
         heroList = new JList<>(listModel);
-        heroList.setBounds(30, 30, 200, 200);
+        detailList = new JList<>(detailModel);
+        detailList.setBounds(300, 30, 200, 200);
+        heroList.setBounds(70, 30, 200, 200);
         loadPanel.add(heroList);
-        //=======================
-        details.setBounds(260, 230, 100, 30);
+        loadPanel.add(detailList);
+        //==================================================================
+        details.setBounds(240, 270, 100, 30);
+        heroUI.getSelect().setBounds(240, 300, 100, 30);
         loadPanel.add(details);
+        loadPanel.add(heroUI.getSelect());
     }
 
     public void displayDetails(ArrayList<Hero> heroes) {
-        JList<String> detailList;
-        DefaultListModel<String> listModel = new DefaultListModel<>();
         Hero hero = heroes.get(heroList.getSelectedIndex());
-        listModel.addElement(hero.getHeroClass());
-        detailList = new JList<>(listModel);
-        detailList.setBounds(260, 30, 200, 200);
 
-        loadPanel.add(detailList);
+        detailModel.removeAllElements();
+        detailModel.addElement(("Class: ").concat(hero.getHeroClass()));
+        detailModel.addElement("Level: ".concat(Integer.toString(hero.getLevel())));
+        detailModel.addElement("Experience: ".concat(Integer.toString(hero.getExperience()).concat(" XP")));
+        detailModel.addElement("Weapon: ".concat(hero.getWeapon()));
+        detailModel.addElement("Armor: ".concat(hero.getArmor()));
+    }
+
+    public void gameMode() {
+        if (loadPanel.isVisible()) {
+            loadPanel.setVisible(false);
+        } else if (createPanel.isVisible()) {
+            createPanel.setVisible(false);
+        }
+
     }
 }

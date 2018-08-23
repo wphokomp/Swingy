@@ -31,6 +31,7 @@ public class TextModeController {
     }
 
     public void playGame() throws InvalidInput {
+        swingTextView.startGame();
         Enemy enemy = null;
         START:
         while (true) {

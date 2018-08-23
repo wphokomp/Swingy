@@ -14,6 +14,9 @@ public class SwingTextView {
     private static Scanner scanner = new Scanner(System.in);
 
     public SwingTextView() {
+    }
+
+    public void startGame() {
         clearScreen();
         System.out.println("1) Create hero.");
         System.out.println("2) Select a hero.");
