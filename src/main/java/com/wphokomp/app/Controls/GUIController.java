@@ -1,7 +1,6 @@
 package com.wphokomp.app.Controls;
 
 import com.wphokomp.app.Models.Hero;
-import com.wphokomp.app.Models.HeroUI;
 import com.wphokomp.app.View.SwingGUIView;
 import com.wphokomp.app.View.SwingTextView;
 
@@ -13,50 +12,49 @@ public class GUIController implements ActionListener {
     private GamePlay gamePlay;
     private SwingTextView swingTextView;
     private Hero hero;
-//    private HeroUI heroUI;
 
     public GUIController(Hero hero, SwingGUIView swingGUIView) {
         this.hero = hero;
         this.swingGUIView = swingGUIView;
         swingTextView = new SwingTextView();
         this.gamePlay = new GamePlay(swingTextView, this.hero);
-//        this.heroUI = new HeroUI();
     }
 
     public void startGame() {
         swingGUIView.setVisible(true);
-        swingGUIView.getNewGame().addActionListener(this);
-        swingGUIView.getLoadGame().addActionListener(this);
-        swingGUIView.getExit().addActionListener(this);
+        swingGUIView.getComponent().getNewGame().addActionListener(this);
+        swingGUIView.getComponent().getLoadGame().addActionListener(this);
+        swingGUIView.getComponent().getExit().addActionListener(this);
         swingGUIView.getDetails().addActionListener(this);
         swingGUIView.getCreateButton().addActionListener(this);
 
-        swingGUIView.getHeroUI().getSelect().addActionListener(this);
+        swingGUIView.getComponent().getSelect().addActionListener(this);
     }
 
     public void playGame() {
         this.hero = this.gamePlay.getHeroes_().get(swingGUIView.getHeroList().getSelectedIndex());
         this.hero.setDefense(this.swingTextView.getDefense(this.hero.getArmor()));
         this.hero.setAttack(this.swingTextView.getAttack(this.hero.getWeapon()));
-        this.swingGUIView.gameMode();
+        this.hero.setHitPoints(100);
+        this.swingGUIView.gameMode(this.hero);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == swingGUIView.getNewGame())
+        if (e.getSource() == swingGUIView.getComponent().getNewGame())
             swingGUIView.createPlayer();
-        else if (e.getSource() == swingGUIView.getLoadGame()) {
+        else if (e.getSource() == swingGUIView.getComponent().getLoadGame()) {
             this.gamePlay.getHeroes();
             swingGUIView.loadPlayers(this.gamePlay.getHeroes_());
         }
-        else if (e.getSource() == swingGUIView.getExit())
+        else if (e.getSource() == swingGUIView.getComponent().getExit())
             System.exit(0);
 
         if (e.getSource() == swingGUIView.getCreateButton())
             swingGUIView.create();
         if (e.getSource() == swingGUIView.getDetails())
             swingGUIView.displayDetails(this.gamePlay.getHeroes_());
-        if (e.getSource() == swingGUIView.getHeroUI().getSelect())
+        if (e.getSource() == swingGUIView.getComponent().getSelect())
             playGame();
     }
 }
