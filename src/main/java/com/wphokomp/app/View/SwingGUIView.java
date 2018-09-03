@@ -42,6 +42,15 @@ public class SwingGUIView extends JFrame {
 
         component.getMenuPanel().setBorder(border);
 
+        component.setDirections(new JComboBox<>(new String[] {"North", "East", "West", "South"}));
+        component.getDirections().setSelectedIndex(-1);
+        component.getDirections().setBounds(90, 220, 100, 30);
+
+        component.setFight(new JButton("Fight!"));
+        component.getFight().setBounds(40, 260, 100, 30);
+        component.setRun(new JButton("Run!"));
+        component.getRun().setBounds(130, 260, 100, 30);
+
         initGame();
         this.add(component.getMenuPanel());
     }
@@ -127,8 +136,6 @@ public class SwingGUIView extends JFrame {
     }
 
     public void gameMode(Hero hero) {
-        String[] dir = new String[] {"North", "East", "West", "South"};
-
         if (component.getLoadPanel().isVisible()) {
             component.getLoadPanel().setVisible(false);
         } else if (component.getCreatePanel().isVisible()) {
@@ -148,21 +155,15 @@ public class SwingGUIView extends JFrame {
         component.getLevelLabel().setBounds(20, 80, 150, 30);
         component.setXpLabel(new JLabel("Experience: ".concat(Integer.toString(hero.getExperience()).concat(" XP"))));
         component.getXpLabel().setBounds(20, 110, 150, 30);
+
         component.setLocationLabel(new JLabel("Location: ".concat(Integer.toString(hero.getX()))
                 .concat(",".concat(Integer.toString(hero.getY())))));
+
         component.getLocationLabel().setBounds(20, 140, 150, 30);
 
         JLabel actions = new JLabel("Actions");
         actions.setFont(new Font("Monaco", Font.BOLD, 22));
         actions.setBounds(90, 180, 150, 30);
-
-        component.setDirections(new JComboBox<>(dir));
-        component.getDirections().setBounds(90, 220, 100, 30);
-
-        component.setFight(new JButton("Fight!"));
-        component.getFight().setBounds(40, 260, 100, 30);
-        component.setRun(new JButton("Run!"));
-        component.getRun().setBounds(130, 260, 100, 30);
 
         component.setMap(new JScrollPane());
 
@@ -175,6 +176,9 @@ public class SwingGUIView extends JFrame {
         component.getGamePanel().add(component.getDirections());
         component.getGamePanel().add(component.getFight());
         component.getGamePanel().add(component.getRun());
+        JLabel noMap = new JLabel("No Map Generated.");
+        noMap.setBounds(400, 50, 200, 200);
+        component.getGamePanel().add(noMap);
 
         this.add(component.getGamePanel());
     }

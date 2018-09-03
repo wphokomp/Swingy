@@ -15,7 +15,6 @@ public class Component {
     private JPanel menuPanel;
     private JPanel createPanel;
     private JPanel loadPanel;
-//    private JPanel gamePanel;
 
     //Game play components
     private JPanel gamePanel;

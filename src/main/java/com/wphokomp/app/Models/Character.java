@@ -10,18 +10,19 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class Character {
-    @NotNull
+    @NotNull(message = "Name cannot be null.")
     private String name;
-    @Min(0)
-    @Max(100)
+    @Min(value = 0, message = "HP cannot be lower than 0.")
+    @Max(value  = 100, message = "HP cannot be higher than 100.")
     private int hitPoints;
-    @Min(0)
+    @Min(value = 0, message = "Attack cannot be lower than 0")
     private int attack;
-    @Min(0)
+    @Min(value = 0, message = "Defense cannot be lower than 0")
     private int defense;
-    @NotNull
+    @NotNull(message = "Weapon cannot be null.")
     private String weapon;
-    @NotNull
+    @NotNull(message = "Armor cannot be null.")
     private String armor;
+    @Min(value = 0, message = "Position cannot be lower than 0")
     private int x, y;
 }

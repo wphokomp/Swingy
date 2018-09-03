@@ -6,6 +6,7 @@ import com.wphokomp.app.Models.Enemy;
 import com.wphokomp.app.Models.Hero;
 import com.wphokomp.app.View.SwingTextView;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +23,7 @@ public class GamePlay implements IModes {
     private int mapSize;
     private Hero hero;
     private SwingTextView swingTextView;
+    @Setter
     private boolean gameInPlay = false;
     ArrayList<Enemy> enemies = new ArrayList<>();
     ArrayList<Hero> heroes_ = new ArrayList<>();
@@ -34,15 +36,20 @@ public class GamePlay implements IModes {
     }
 
     public Hero initGame() throws InvalidInput {
+        boolean parsed = true;
         if (!this.gameInPlay) {
-            if (swingTextView.getChoice().equals("1")) {
-                createHero();
-            } else if (swingTextView.getChoice().equals("2")) {
+            if (swingTextView.getChoice().equals("1")) createHero();
+            else if (swingTextView.getChoice().equals("2")) {
                 int i = 0;
                 getHeroes();
                 for (Hero _hero : this.heroes_)
                     System.out.println(Integer.toString(++i).concat(") ".concat(_hero.getName())));
-                hero = this.heroes_.get(Integer.parseInt(scanner.nextLine()) - 1);
+                try {
+                    hero = this.heroes_.get(Integer.parseInt(scanner.nextLine()) - 1);
+                } catch (Exception ex) {
+                    parsed = false;
+                }
+                if (!parsed) throw new InvalidInput("Invalid input.");
                 hero.setAttack(swingTextView.getAttack(hero.getWeapon()));
                 hero.setDefense(swingTextView.getDefense(hero.getArmor()));
                 hero.setHitPoints(100);
@@ -107,13 +114,15 @@ public class GamePlay implements IModes {
     }
 
     @Override
-    public void getHeroes() {
+    public void getHeroes() throws InvalidInput {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(inFile));
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
                 String trimmedLine = currentLine.trim();
                 String[] stats = trimmedLine.split(",");
+                if (stats.length < 6)
+                    throw new InvalidInput("Hero data is incomplete.");
                 hero = new Hero();
                 hero.setName(stats[0]);
                 hero.setHeroClass(stats[1]);
